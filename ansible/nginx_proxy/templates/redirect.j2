@@ -1,0 +1,15 @@
+upstream apps {
+        
+       {% for host in groups['nginx_app'] %}
+       server {{  hostvars[host]['ansible_host'] }};
+       {% endfor %}  
+
+}
+server {
+        listen 3000;
+        server_name {{ ansible_host }};
+
+        location / {
+                proxy_pass http://apps;
+        }
+}
